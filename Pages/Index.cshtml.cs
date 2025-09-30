@@ -18,12 +18,29 @@ namespace RazorPagesFeladat.Pages
         {
             _context = context;
         }
+        [BindProperty(SupportsGet = true)]
+        public string KivalasztottTelepules { get; set; }
 
-        public IList<BarlangModel> BarlangModel { get;set; } = default!;
+        public IList<string> Telepulesek { get; set; } = default!;
+        public IList<BarlangModel> BarlangModel { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
-            BarlangModel = await _context.BarlangModels.ToListAsync();
+            Telepulesek = await _context.BarlangModels
+                .Select(x => x.Telepules)
+                .Distinct()
+                .ToListAsync();
+
+            if (KivalasztottTelepules == null)
+            {
+                BarlangModel = await _context.BarlangModels.ToListAsync();
+            }
+            else
+            {
+                BarlangModel = await _context.BarlangModels
+                    .Where(x => x.Telepules == KivalasztottTelepules)
+                    .ToListAsync();
+            }
         }
     }
 }
