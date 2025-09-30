@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using RazorPagesFeladat.Data;
+
 namespace RazorPagesFeladat
 {
     public class Program
@@ -8,7 +11,8 @@ namespace RazorPagesFeladat
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-
+            builder.Services.AddDbContext<BarlangDbContext>(options =>
+                options.UseSqlite(@"Data Source=.\Data\Barlangok.db"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
